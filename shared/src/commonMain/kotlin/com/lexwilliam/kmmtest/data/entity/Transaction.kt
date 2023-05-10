@@ -1,4 +1,4 @@
-package com.lexwilliam.kmmtest.entity
+package com.lexwilliam.kmmtest.data.entity
 
 data class Transaction(
     val KMMuid: Long,

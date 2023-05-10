@@ -84,7 +84,7 @@ android {
 
 sqldelight {
     database("AppDatabase") {
-        packageName = "com.lexwilliam.kmmtest.cache"
+        packageName = "com.lexwilliam.kmmtest.data.cache"
         sourceFolders = listOf("kotlin")
     }
 }

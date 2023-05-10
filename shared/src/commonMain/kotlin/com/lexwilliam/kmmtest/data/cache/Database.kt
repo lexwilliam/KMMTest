@@ -1,7 +1,7 @@
-package com.lexwilliam.kmmtest.cache
+package com.lexwilliam.kmmtest.data.cache
 
-import com.lexwilliam.kmmtest.entity.Transaction
-import com.lexwilliam.kmmtest.entity.TransactionType
+import com.lexwilliam.kmmtest.data.entity.Transaction
+import com.lexwilliam.kmmtest.data.entity.TransactionType
 
 internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())

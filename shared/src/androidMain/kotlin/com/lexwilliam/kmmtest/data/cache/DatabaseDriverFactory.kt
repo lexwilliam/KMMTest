@@ -1,4 +1,4 @@
-package com.lexwilliam.kmmtest.cache
+package com.lexwilliam.kmmtest.data.cache
 
 import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
