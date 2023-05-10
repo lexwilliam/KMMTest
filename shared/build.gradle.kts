@@ -1,6 +1,8 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    kotlin("plugin.serialization") version "1.8.21"
+    id("com.squareup.sqldelight")
 }
 
 kotlin {
@@ -33,6 +35,8 @@ kotlin {
                 api("com.arkivanov.mvikotlin:rx:3.2.0")
                 api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 api("io.insert-koin:koin-core:3.4.0")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                api("com.squareup.sqldelight:runtime:1.5.5")
             }
         }
         val commonTest by getting {
@@ -40,7 +44,11 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation("com.squareup.sqldelight:android-driver:1.5.5")
+            }
+        }
         val androidUnitTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -50,6 +58,9 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                implementation("com.squareup.sqldelight:native-driver:1.5.5")
+            }
         }
         val iosX64Test by getting
         val iosArm64Test by getting
@@ -68,5 +79,12 @@ android {
     compileSdk = 33
     defaultConfig {
         minSdk = 24
+    }
+}
+
+sqldelight {
+    database("AppDatabase") {
+        packageName = "com.lexwilliam.kmmtest.cache"
+        sourceFolders = listOf("kotlin")
     }
 }

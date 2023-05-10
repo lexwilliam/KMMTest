@@ -1,0 +1,27 @@
+CREATE TABLE transaction_table (
+    KMMuid  INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    desc TEXT NOT NULL,
+    type TEXT NOT NULL,
+    value INTEGER NOT NULL
+);
+
+insertTransaction:
+INSERT INTO transaction_table(
+    KMMuid,
+    name,
+    desc,
+    type,
+    value
+)
+VALUES (?, ?, ?, ?, ?);
+
+removeAllTransactions:
+DELETE FROM transaction_table;
+
+selectAllTransactions:
+SELECT transaction_table.*
+FROM transaction_table;
+
+
+
