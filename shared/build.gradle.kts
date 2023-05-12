@@ -37,6 +37,7 @@ kotlin {
                 api("io.insert-koin:koin-core:3.4.0")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 api("com.squareup.sqldelight:runtime:1.5.5")
+                api("com.squareup.sqldelight:coroutines-extensions:1.5.5")
             }
         }
         val commonTest by getting {

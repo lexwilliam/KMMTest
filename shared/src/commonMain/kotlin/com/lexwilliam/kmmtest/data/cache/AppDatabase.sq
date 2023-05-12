@@ -1,5 +1,5 @@
 CREATE TABLE transaction_table (
-    KMMuid  INTEGER NOT NULL,
+    id  TEXT NOT NULL,
     name TEXT NOT NULL,
     desc TEXT NOT NULL,
     type TEXT NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE transaction_table (
 
 insertTransaction:
 INSERT INTO transaction_table(
-    KMMuid,
+    id,
     name,
     desc,
     type,

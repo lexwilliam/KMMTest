@@ -1,7 +1,7 @@
-package com.lexwilliam.kmmtest.data.entity
+package com.lexwilliam.kmmtest.domain.model
 
 data class Transaction(
-    val KMMuid: Long,
+    val id: KmmUUID = KmmUUID(),
     val name: String,
     val desc: String,
     val type: TransactionType,
