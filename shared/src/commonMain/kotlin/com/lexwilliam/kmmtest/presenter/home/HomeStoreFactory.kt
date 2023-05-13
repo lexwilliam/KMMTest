@@ -6,7 +6,10 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.lexwilliam.kmmtest.domain.TransactionRepository
+import com.lexwilliam.kmmtest.domain.model.Transaction
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 internal class HomeStoreFactory(
     private val storeFactory: StoreFactory,
@@ -26,6 +29,7 @@ internal class HomeStoreFactory(
     }
 
     private sealed interface Message {
+        data class Loaded(val transactions: List<Transaction>): Message
     }
 
     private inner class ListExecutor: CoroutineExecutor<HomeIntent, Unit, HomeState, Message, HomeEffect>() {
@@ -33,19 +37,31 @@ internal class HomeStoreFactory(
         private var job: Job? = null
 
         override fun executeAction(action: Unit, getState: () -> HomeState) {
-            super.executeAction(action, getState)
+            handleDataLoaded()
         }
 
         override fun executeIntent(intent: HomeIntent, getState: () -> HomeState) {
-            super.executeIntent(intent, getState)
+            when (intent) {
+                HomeIntent.AddTransaction -> publish(HomeEffect.NavigateToAdd)
+                else -> {}
+            }
+        }
+
+        private fun handleDataLoaded() {
+            job?.cancel()
+            job = repository
+                .getAllTransactions()
+                .onEach { transactions -> dispatch(Message.Loaded(transactions)) }
+                .launchIn(scope)
         }
 
     }
 
     private object ListReducer: Reducer<HomeState, Message> {
-        override fun HomeState.reduce(msg: Message): HomeState {
-            TODO("Not yet implemented")
-        }
+        override fun HomeState.reduce(msg: Message): HomeState =
+            when (msg) {
+                is Message.Loaded -> copy(transactions = msg.transactions, isLoading = false)
+            }
 
     }
 

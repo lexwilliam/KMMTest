@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val storeModule = module {
     factory<StoreFactory> { DefaultStoreFactory() }
-    factory { HomeStoreFactory(get(), get()) }
+    factory { HomeStoreFactory(storeFactory = get(), repository = get()).create() }
 }
