@@ -47,7 +47,8 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("com.squareup.sqldelight:android-driver:1.5.5")
+                api("com.squareup.sqldelight:android-driver:1.5.5")
+                api("io.insert-koin:koin-core:3.4.0")
             }
         }
         val androidUnitTest by getting
