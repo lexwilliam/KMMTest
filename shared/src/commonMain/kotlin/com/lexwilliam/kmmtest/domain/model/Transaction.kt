@@ -5,9 +5,12 @@ data class Transaction(
     val name: String,
     val desc: String,
     val type: TransactionType,
-    val value: Long
+    val value: Double
 )
 
-enum class TransactionType {
-    INCOME, EXPENSE, TRANSFER, EMPTY
+enum class TransactionType(val nm: String) {
+    INCOME("Income"),
+    EXPENSE("Expense"),
+    TRANSFER("Transfer"),
+    EMPTY("Empty")
 }

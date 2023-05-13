@@ -51,7 +51,7 @@ class TransactionLocalSourceImpl(
         name: String,
         desc: String,
         type: String,
-        value: Long
+        value: Double
     ): Transaction {
         return Transaction(
             KmmUUID.fromString(id), name, desc, toTransactionType(type), value
