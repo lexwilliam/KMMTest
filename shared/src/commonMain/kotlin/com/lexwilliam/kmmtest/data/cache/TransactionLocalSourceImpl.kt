@@ -7,6 +7,8 @@ import com.lexwilliam.kmmtest.domain.model.Transaction
 import com.lexwilliam.kmmtest.domain.model.TransactionType
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOne
+import com.squareup.sqldelight.runtime.coroutines.mapToOneNotNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
@@ -28,7 +30,7 @@ class TransactionLocalSourceImpl(
 
     override fun getAllTransactions(): Flow<List<Transaction>> {
         return dbQuery
-            .selectAllTransactions(::mapTransactions)
+            .selectAllTransactions(::mapTransaction)
             .asFlow()
             .mapToList()
             .flowOn(dispatcher.io())
@@ -46,7 +48,31 @@ class TransactionLocalSourceImpl(
         }
     }
 
-    private fun mapTransactions(
+    override suspend fun getTransactionById(id: String): Transaction {
+        return dbQuery
+            .selectTransactionById(id, ::mapTransaction)
+            .executeAsOne()
+    }
+
+    override suspend fun updateTransaction(transaction: Transaction) {
+        withContext(dispatcher.io()) {
+            dbQuery.updateTransaction(
+                name = transaction.name,
+                desc = transaction.desc,
+                type = toString(transaction.type),
+                value_ = transaction.value,
+                id = transaction.id.uuidString
+            )
+        }
+    }
+
+    override suspend fun deleteTransactionById(id: String) {
+        withContext(dispatcher.io()) {
+            dbQuery.deleteTransactionById(id)
+        }
+    }
+
+    private fun mapTransaction(
         id: String,
         name: String,
         desc: String,

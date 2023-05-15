@@ -28,4 +28,8 @@ class HomeViewModel(
     fun onAddTapped() {
         store.accept(HomeIntent.AddTransaction)
     }
+
+    fun onTransactionTapped(id: String) {
+        store.accept(HomeIntent.TransactionTapped(id))
+    }
 }

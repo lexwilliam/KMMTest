@@ -1,5 +1,6 @@
 package com.lexwilliam.kmmtest.android.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,6 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeRoute(
     toAdd: () -> Unit,
+    toDetail: (String) -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -45,6 +47,7 @@ fun HomeRoute(
         sideEffect?.let { effect ->
             when (effect) {
                 HomeEffect.NavigateToAdd -> toAdd()
+                is HomeEffect.NavigateToDetail -> toDetail(effect.id)
             }
         }
     }
@@ -70,14 +73,17 @@ fun HomeRoute(
         ) {
             when {
                 uiState.isLoading -> CircularProgressIndicator()
-                else -> HomeScreen(state = uiState)
+                else -> HomeScreen(state = uiState, viewModel = viewModel)
             }
         }
     }
 }
 
 @Composable
-fun HomeScreen(state: HomeState) {
+fun HomeScreen(
+    state: HomeState,
+    viewModel: HomeViewModel
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -85,7 +91,11 @@ fun HomeScreen(state: HomeState) {
     ) {
         items(items = state.transactions) { transaction ->
             TransactionItemView(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        viewModel.onTransactionTapped(transaction.id.uuidString)
+                    },
                 transaction = transaction
             )
         }

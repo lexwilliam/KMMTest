@@ -23,5 +23,23 @@ selectAllTransactions:
 SELECT transaction_table.*
 FROM transaction_table;
 
+selectTransactionById:
+SELECT transaction_table.*
+FROM transaction_table
+WHERE id = ?;
+
+updateTransaction:
+UPDATE transaction_table
+SET
+name = ?,
+desc = ?,
+type = ?,
+value = ?
+WHERE id = ?;
+
+deleteTransactionById:
+DELETE FROM transaction_table
+WHERE id = ?;
+
 
 

@@ -10,5 +10,11 @@ interface TransactionLocalSource {
 
     suspend fun insertTransaction(transaction: Transaction)
 
+    suspend fun getTransactionById(id: String): Transaction
+
+    suspend fun updateTransaction(transaction: Transaction)
+
+    suspend fun deleteTransactionById(id: String)
+
 
 }

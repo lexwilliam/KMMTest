@@ -37,17 +37,17 @@ internal class HomeStoreFactory(
         private var job: Job? = null
 
         override fun executeAction(action: Unit, getState: () -> HomeState) {
-            handleDataLoaded()
+            handleTransactionsLoaded()
         }
 
         override fun executeIntent(intent: HomeIntent, getState: () -> HomeState) {
             when (intent) {
                 HomeIntent.AddTransaction -> publish(HomeEffect.NavigateToAdd)
-                else -> {}
+                is HomeIntent.TransactionTapped -> publish(HomeEffect.NavigateToDetail(intent.id))
             }
         }
 
-        private fun handleDataLoaded() {
+        private fun handleTransactionsLoaded() {
             job?.cancel()
             job = repository
                 .getAllTransactions()

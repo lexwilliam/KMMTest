@@ -20,4 +20,16 @@ class TransactionRepositoryImpl(
         return transactionLocalSource.insertTransaction(transaction)
     }
 
+    override suspend fun getTransactionById(id: String): Transaction {
+        return transactionLocalSource.getTransactionById(id)
+    }
+
+    override suspend fun updateTransaction(transaction: Transaction) {
+        return transactionLocalSource.updateTransaction(transaction)
+    }
+
+    override suspend fun deleteTransactionById(id: String) {
+        return transactionLocalSource.deleteTransactionById(id)
+    }
+
 }

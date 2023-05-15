@@ -87,15 +87,15 @@ fun AddScreen(
             activeType = type,
             onTypeChanged = { type = it }
         )
-        AddTransactionTextField(
+        TransactionTextField(
             value = valueText.toString(),
             onValueChange = { valueText = it.toDouble() }
         )
-        AddTransactionTextField(
+        TransactionTextField(
             value = nameText,
             onValueChange = { nameText = it }
         )
-        AddTransactionTextField(
+        TransactionTextField(
             value = descText,
             onValueChange = { descText = it }
         )
@@ -132,7 +132,7 @@ private fun checkTransaction(
 
 
 @Composable
-fun AddTransactionTextField(
+fun TransactionTextField(
     value: String,
     onValueChange: (String) -> Unit,
 
@@ -154,7 +154,8 @@ fun TypeChipGroup(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         val chipModifier = Modifier.weight(1f).width(48.dp)
         TypeChip(
