@@ -74,46 +74,40 @@ fun AddScreen(
     state: AddState,
     viewModel: AddViewModel
 ) {
-    var nameText by remember { mutableStateOf("") }
-    var descText by remember { mutableStateOf("") }
-    var type by remember { mutableStateOf(TransactionType.EMPTY) }
-    var valueText by remember { mutableStateOf(0.0) }
-
+    val transaction = Transaction(
+        name = state.name,
+        desc = state.desc,
+        type = state.type,
+        value = state.value
+    )
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         TypeChipGroup(
-            activeType = type,
-            onTypeChanged = { type = it }
+            activeType = state.type,
+            onTypeChanged = { viewModel.onTypeChanged(it) }
         )
         TransactionTextField(
-            value = valueText.toString(),
-            onValueChange = { valueText = it.toDouble() }
+            value = state.value.toString(),
+            onValueChange = { viewModel.onValueChanged(it.toDouble()) }
         )
         TransactionTextField(
-            value = nameText,
-            onValueChange = { nameText = it }
+            value = state.name,
+            onValueChange = { viewModel.onNameChanged(it) }
         )
         TransactionTextField(
-            value = descText,
-            onValueChange = { descText = it }
+            value = state.desc,
+            onValueChange = { viewModel.onDescChanged(it) }
         )
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             onClick = {
-                viewModel.onInsertTapped(
-                    Transaction(
-                        name = nameText,
-                        desc = descText,
-                        type = type,
-                        value = valueText
-                    )
-                )
+                viewModel.onInsertTapped(transaction)
             },
-            enabled = checkTransaction(nameText, descText, type, valueText)
+            enabled = checkTransaction(transaction)
         ) {
             Text("Add Transaction")
         }
@@ -121,13 +115,10 @@ fun AddScreen(
 }
 
 private fun checkTransaction(
-    name: String,
-    desc: String,
-    type: TransactionType,
-    value: Double
+    transaction: Transaction
 ): Boolean {
-    return !(name.isBlank() || desc.isBlank() ||
-            type == TransactionType.EMPTY || value == 0.0)
+    return !(transaction.name.isBlank() || transaction.desc.isBlank() ||
+            transaction.type == TransactionType.EMPTY || transaction.value == 0.0)
 }
 
 

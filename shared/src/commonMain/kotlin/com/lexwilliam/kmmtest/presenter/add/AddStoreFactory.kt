@@ -7,6 +7,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.lexwilliam.kmmtest.domain.TransactionRepository
 import com.lexwilliam.kmmtest.domain.model.Transaction
+import com.lexwilliam.kmmtest.domain.model.TransactionType
+import com.lexwilliam.kmmtest.presenter.detail.DetailStoreFactory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -23,12 +25,15 @@ internal class AddStoreFactory(
                 bootstrapper = SimpleBootstrapper(Unit),
                 initialState = AddState(),
                 executorFactory = ::ListExecutor,
-//                reducer = ListReducer
+                reducer = ListReducer
             ) {}
     }
 
     private sealed interface Message {
-//        data class TransactionAdded(val transactions: Transaction): Message
+        data class NameChanged(val name: String): Message
+        data class DescChanged(val desc: String): Message
+        data class TypeChanged(val type: TransactionType): Message
+        data class ValueChanged(val value: Double): Message
     }
 
     private inner class ListExecutor: CoroutineExecutor<AddIntent, Unit, AddState, Message, AddEffect>() {
@@ -40,6 +45,10 @@ internal class AddStoreFactory(
         override fun executeIntent(intent: AddIntent, getState: () -> AddState) {
             when (intent) {
                 is AddIntent.InsertTransaction -> handleInsertTransaction(intent.transaction)
+                is AddIntent.NameChanged -> dispatch(Message.NameChanged(intent.name))
+                is AddIntent.DescChanged -> dispatch(Message.DescChanged(intent.desc))
+                is AddIntent.TypeChanged -> dispatch(Message.TypeChanged(intent.type))
+                is AddIntent.ValueChanged -> dispatch(Message.ValueChanged(intent.value))
             }
         }
 
@@ -58,12 +67,25 @@ internal class AddStoreFactory(
 
     }
 
-//    private object ListReducer: Reducer<AddState, Message> {
-//        override fun AddState.reduce(msg: Message): AddState {
-//
-//        }
-//
-//    }
+    private object ListReducer: Reducer<AddState, Message> {
+        override fun AddState.reduce(msg: Message): AddState {
+            return when (msg) {
+                is Message.NameChanged -> copy(
+                    name = msg.name
+                )
+                is Message.DescChanged -> copy(
+                    desc = msg.desc
+                )
+                is Message.TypeChanged -> copy(
+                    type = msg.type
+                )
+                is Message.ValueChanged-> copy(
+                    value = msg.value
+                )
+            }
+        }
+
+    }
 
 
 
