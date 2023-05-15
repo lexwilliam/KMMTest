@@ -10,8 +10,6 @@ import com.lexwilliam.kmmtest.domain.model.KmmUUID
 import com.lexwilliam.kmmtest.domain.model.Transaction
 import com.lexwilliam.kmmtest.domain.model.TransactionType
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 internal class DetailStoreFactory(
@@ -75,7 +73,7 @@ internal class DetailStoreFactory(
                     state.name,
                     state.desc,
                     state.type,
-                    state.value
+                    state.valueText.toDouble()
                 )
                 if (checkTransaction(transaction)) {
                     repository.updateTransaction(transaction)
@@ -126,7 +124,7 @@ internal class DetailStoreFactory(
                     name = msg.transaction.name,
                     desc = msg.transaction.desc,
                     type = msg.transaction.type,
-                    value = msg.transaction.value,
+                    valueText = msg.transaction.value.toString(),
                     isLoading = false
                 )
                 Message.ArgsNotFounded -> copy(
@@ -142,7 +140,7 @@ internal class DetailStoreFactory(
                     type = msg.type
                 )
                 is Message.ValueChanged -> copy(
-                    value = msg.value
+                    valueText = msg.value.toString()
                 )
             }
         }

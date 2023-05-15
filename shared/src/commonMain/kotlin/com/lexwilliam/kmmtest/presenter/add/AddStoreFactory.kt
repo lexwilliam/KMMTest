@@ -80,7 +80,7 @@ internal class AddStoreFactory(
                     type = msg.type
                 )
                 is Message.ValueChanged-> copy(
-                    value = msg.value
+                    valueText = msg.value.toString()
                 )
             }
         }

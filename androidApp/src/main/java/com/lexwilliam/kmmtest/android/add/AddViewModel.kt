@@ -44,8 +44,11 @@ class AddViewModel(
         store.accept(AddIntent.TypeChanged(type))
     }
 
-    fun onValueChanged(value: Double) {
-        store.accept(AddIntent.ValueChanged(value))
+    fun onValueChanged(valueText: String) {
+        val checkVal = valueText.toDoubleOrNull()
+        if (checkVal != null) {
+            store.accept(AddIntent.ValueChanged(checkVal))
+        }
     }
 
 }

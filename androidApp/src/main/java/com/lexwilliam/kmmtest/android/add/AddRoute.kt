@@ -1,5 +1,6 @@
 package com.lexwilliam.kmmtest.android.add
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FilterChip
@@ -23,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lexwilliam.kmmtest.domain.model.Transaction
@@ -78,7 +82,7 @@ fun AddScreen(
         name = state.name,
         desc = state.desc,
         type = state.type,
-        value = state.value
+        value = if (state.valueText == "") 0.0 else state.valueText.toDouble()
     )
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -86,19 +90,25 @@ fun AddScreen(
     ) {
         TypeChipGroup(
             activeType = state.type,
-            onTypeChanged = { viewModel.onTypeChanged(it) }
+            onTypeChanged = { viewModel.onTypeChanged(it) },
         )
         TransactionTextField(
-            value = state.value.toString(),
-            onValueChange = { viewModel.onValueChanged(it.toDouble()) }
+            value = state.valueText,
+            onValueChange = { viewModel.onValueChanged(it) },
+            label = "Value",
+            isNum = true
         )
         TransactionTextField(
             value = state.name,
-            onValueChange = { viewModel.onNameChanged(it) }
+            onValueChange = { viewModel.onNameChanged(it) },
+            label = "Name",
+            isNum = false
         )
         TransactionTextField(
             value = state.desc,
-            onValueChange = { viewModel.onDescChanged(it) }
+            onValueChange = { viewModel.onDescChanged(it) },
+            label = "Description",
+            isNum = false
         )
         Button(
             modifier = Modifier
@@ -126,14 +136,19 @@ private fun checkTransaction(
 fun TransactionTextField(
     value: String,
     onValueChange: (String) -> Unit,
-
+    label: String,
+    isNum: Boolean
 ) {
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         value = value,
-        onValueChange = { onValueChange(it) }
+        label = { Text(text = label)},
+        onValueChange = { onValueChange(it) },
+        singleLine = true,
+        keyboardOptions = if (isNum) KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            else KeyboardOptions(keyboardType = KeyboardType.Text)
     )
 }
 
@@ -178,9 +193,12 @@ fun TypeChip(
     activeType: TransactionType,
     onClick: (TransactionType) -> Unit
 ) {
+    val isSelected = (activeType == type)
     FilterChip(
         modifier = modifier,
-        selected = activeType == type,
+        selected = isSelected,
+        border = if (isSelected) BorderStroke(2.dp, Color.Black)
+            else BorderStroke(0.dp, Color.Transparent),
         onClick = { onClick(type) }
     ) {
         Text(type.nm)

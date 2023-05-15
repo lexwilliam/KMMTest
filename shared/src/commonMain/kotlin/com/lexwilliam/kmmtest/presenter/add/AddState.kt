@@ -6,5 +6,5 @@ data class AddState(
     var name: String = "",
     var desc: String = "",
     var type: TransactionType = TransactionType.EMPTY,
-    var value: Double = 0.0
+    var valueText: String = ""
 )

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.states
-import com.lexwilliam.kmmtest.domain.model.Transaction
 import com.lexwilliam.kmmtest.domain.model.TransactionType
 import com.lexwilliam.kmmtest.presenter.detail.DetailEffect
 import com.lexwilliam.kmmtest.presenter.detail.DetailIntent
@@ -58,8 +57,11 @@ class DetailViewModel(
         store.accept(DetailIntent.TypeChanged(type))
     }
 
-    fun onValueChanged(value: Double) {
-        store.accept(DetailIntent.ValueChanged(value))
+    fun onValueChanged(valueText: String) {
+        val checkVal = valueText.toDoubleOrNull()
+        if (checkVal != null) {
+            store.accept(DetailIntent.ValueChanged(checkVal))
+        }
     }
 
     fun onSaveTapped() {

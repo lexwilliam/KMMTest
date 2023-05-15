@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lexwilliam.kmmtest.android.add.TransactionTextField
 import com.lexwilliam.kmmtest.android.add.TypeChipGroup
-import com.lexwilliam.kmmtest.android.home.HomeScreen
 import com.lexwilliam.kmmtest.presenter.detail.DetailEffect
 import com.lexwilliam.kmmtest.presenter.detail.DetailState
 import org.koin.androidx.compose.koinViewModel
@@ -52,6 +51,7 @@ fun DetailRoute(
                 actions = {
                     Text(
                         modifier = Modifier
+                            .padding(horizontal = 16.dp)
                             .clickable {
                                 viewModel.onSaveTapped()
                             },
@@ -94,16 +94,22 @@ fun DetailScreen(
             onTypeChanged = { viewModel.onTypeChanged(it) }
         )
         TransactionTextField(
-            value = state.value.toString(),
-            onValueChange = { viewModel.onValueChanged(it.toDouble()) }
+            value = state.valueText,
+            onValueChange = { viewModel.onValueChanged(it) },
+            label = "Value",
+            isNum = true
         )
         TransactionTextField(
             value = state.name,
-            onValueChange = { viewModel.onNameChanged(it) }
+            onValueChange = { viewModel.onNameChanged(it) },
+            label = "Name",
+            isNum = false
         )
         TransactionTextField(
             value = state.desc,
-            onValueChange = { viewModel.onDescChanged(it) }
+            onValueChange = { viewModel.onDescChanged(it) },
+            label = "Description",
+            isNum = false
         )
         DeleteButton(
             onClick = { viewModel.onDeleteTapped() }
